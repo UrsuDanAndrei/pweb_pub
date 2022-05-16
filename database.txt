@@ -1,0 +1,1 @@
+docker run --name=PWebMySQL -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=db --publish 6603:3306 -d mysql:5.7

@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+    db:
+        image: mysql:5.7
+        ports:
+            - "6603:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: db
+
+        volumes:
+            - db_volume:/var/lib/mysql
+        
+        networks:
+            - spring_app_db
+
+    fend:
+        build:
+            context: frontend/help4ukraine
+            dockerfile: fend.Dockerfile
+
+        ports:
+            - "4200:4200"
+        depends_on:
+            - db
+        
+        networks:
+            - spring_app_db
+
+    bend:
+        build:
+            context: .
+            dockerfile: bend.Dockerfile
+
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db
+        
+        networks:
+            - spring_app_db
+
+networks:
+    spring_app_db:
+
+volumes:
+    db_volume:

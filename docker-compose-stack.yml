@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+    mydb:
+        image: mysql:5.7
+        ports:
+            - "6603:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_DATABASE: db
+
+        deploy:
+            placement:
+                constraints:
+                    - "node.role==manager"
+
+
+        volumes:
+            - db_volume:/var/lib/mysql
+        
+        networks:
+            - spring_app_mydb
+
+
+
+    spring_app:
+
+
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mydb
+        
+        deploy:
+            replicas: 3
+            placement:
+                max_replicas_per_node: 2
+
+        networks:
+            - spring_app_mydb
+
+networks:
+    spring_app_mydb:
+
+volumes:
+    db_volume:

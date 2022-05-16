@@ -1,0 +1,34 @@
+.image{
+    height:100vh;
+    background-size:cover;
+    width:100vw;
+    background-image:url('../../assets/images/roles.jpg');
+    background-position:50% 50%;
+    position: absolute;
+    // margin-top:0px;
+  }
+
+.greetings {
+    position: absolute;
+    color: yellow;
+    width: 20%;
+    margin-left: 40%;
+    margin-top: 7.5%;
+    text-align: center;
+}
+
+.selection-caption {
+    position: absolute;
+    color: yellow;
+    width: 20%;
+    margin-left: 10%;
+    margin-top: 12%;
+    text-align: left;
+}
+
+.cards {
+    position: absolute;
+    margin-top: 16%;
+    margin-left: 25%;
+    width: 50%;
+}
