@@ -1,0 +1,37 @@
+_format_version: "2.1"
+
+services:
+  - name: bend-view-all
+    url: http://bend:8080/locations/viewAll
+    routes:
+      - name: view-all
+        paths: 
+          - /locations/viewAll
+
+  - name: bend-history
+    url: http://bend:8080/locations/history
+    routes:
+      - name: history
+        paths: 
+          - /locations/history
+
+  - name: bend-view
+    url: http://bend:8080/requests/view
+    routes:
+      - name: view
+        paths: 
+          - /requests/view
+
+  - name: bend-add
+    url: http://bend:8080/requests/add
+    routes:
+      - name: add
+        paths: 
+          - /requests/add
+
+  - name: bend-received
+    url: http://bend:8080/requests/received
+    routes:
+      - name: view-received
+        paths: 
+          - /requests/received

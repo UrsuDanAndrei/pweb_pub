@@ -1,46 +1,80 @@
 version: "3.8"
 
 services:
-    mydb:
+    db:
         image: mysql:5.7
         ports:
             - "6603:3306"
         environment:
             MYSQL_ROOT_PASSWORD: secret
             MYSQL_DATABASE: db
-
-        deploy:
-            placement:
-                constraints:
-                    - "node.role==manager"
-
+            MYSQL_ROOT_HOST: '%'
 
         volumes:
             - db_volume:/var/lib/mysql
         
         networks:
-            - spring_app_mydb
+            - bend_db
 
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - "node.role==manager"
 
+    # fend:
+    #     image: my_fend
 
-    spring_app:
+    #     ports:
+    #         - "4200:4200"
+    #     depends_on:
+    #         - db
+        
+    #     networks:
+    #         - bend_db
 
+    bend:
+        image: my_bend
 
         ports:
             - "8080:8080"
+
         depends_on:
-            - mydb
-        
-        deploy:
-            replicas: 3
-            placement:
-                max_replicas_per_node: 2
+            - db
 
         networks:
-            - spring_app_mydb
+            - bend_db
+
+        deploy:
+            replicas: 2
+            placement:
+                max_replicas_per_node: 1
+
+    kong:
+        image: kong:latest
+        volumes:
+            - ./Kong:/usr/local/kong/declarative
+        environment:
+            KONG_DATABASE: 'off'
+            KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml
+            KONG_PROXY_ACCESS_LOG: /dev/stdout
+            KONG_ADMIN_ACCESS_LOG: /dev/stdout
+            KONG_PROXY_ERROR_LOG: /dev/stderr
+            KONG_ADMIN_ERROR_LOG: /dev/stderr
+            KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+        ports:
+            - 80:8000
+            - 8443:8443
+            - 8001:8001
+            - 8444:8444
+        deploy:
+            placement:
+                constraints: [node.role == manager]
+        networks:
+            - bend_db
 
 networks:
-    spring_app_mydb:
+    bend_db:
 
 volumes:
     db_volume:
